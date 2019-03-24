@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js">
+  </script>
+</head>
+
+<body>
+
+  <canvas id="myChart" width="900" height="400"></canvas>
+  <script type="text/javascript">
+
+    var ctx = document.getElementById("myChart");
+    var dataNo = [103, 120, 48, 61, 82, 26, 105, 124, 78, 91, 62, 56];
+    var labels = [103, 120, 48, 61, 82, 26, 105, 124, 78, 91, 62, 56];
+    var myChart;
+    var backgroundColor = ['rgba(255, 99, 132, 0.2)',
+      'rgba(54, 162, 235, 0.2)',
+      'rgba(255, 206, 86, 0.2)',
+      'rgba(75, 192, 192, 0.2)',
+      'rgba(153, 102, 255, 0.2)',
+      'rgba(255, 159, 64, 0.2)',
+      'rgba(255, 19, 132, 0.2)',
+      'rgba(54, 12, 235, 0.2)',
+      'rgba(25, 206, 86, 0.2)',
+      'rgba(75, 192, 12, 0.2)',
+      'rgba(153, 72, 255, 0.2)',
+      'rgba(255, 159, 164, 0.2)'
+    ];
+    var borderColor = [
+      'rgba(255,99,132,1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)',
+      'rgba(75, 192, 192, 1)',
+      'rgba(153, 102, 255, 1)',
+      'rgba(255, 159, 64, 1)',
+      'rgba(255,19,132,1)',
+      'rgba(54, 12, 235, 1)',
+      'rgba(25, 206, 86, 1)',
+      'rgba(75, 192, 12, 1)',
+      'rgba(153, 72, 255, 1)',
+      'rgba(255, 159, 164, 1)'
+    ];
+
+    display(dataNo);
+    bubble_Sort(dataNo);
+
+    function bubble_Sort(a) {
+      var swapp;
+      var n = a.length - 1;
+      var x = a;
+      swapp = false;
+      (function theLoop(swapp) {
+        setTimeout(function () {
+          (function innerLoop(i) {
+            setTimeout(function () {
+              if (x[i] > x[i + 1]) {
+                var temp = x[i];
+                x[i] = x[i + 1];
+                x[i + 1] = temp;
+
+                temp = labels[i];
+                labels[i] = labels[i + 1];
+                labels[i + 1] = temp;
+
+                temp = backgroundColor[i];
+                backgroundColor[i] = backgroundColor[i + 1];
+                backgroundColor[i + 1] = temp;
+
+                temp = borderColor[i];
+                borderColor[i] = borderColor[i + 1];
+                borderColor[i + 1] = temp;
+
+                swapp = true;
+              }
+              update(x);
+              if (i < n) {
+                i++;
+                innerLoop(i);
+              } else {
+                if (swapp) {
+                  theLoop(swapp);
+                }
+              }
+            }, 200);
+          })(0);
+        }, 4);
+      })(swapp);
+      return x;
+    }
+
+    function update(data) {
+      myChart.data.labels = labels;
+      myChart.data.datasets.forEach((dataset) => {
+        dataset.data.push(data);
+      });
+      myChart.update();
+    }
+
+    function display(dataNo) {
+      myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: [103, 120, 48, 61, 82, 26, 105, 124, 78, 91, 62, 56],
+          datasets: [
+            {
+              label: 'Value',
+              data: dataNo,
+              backgroundColor: backgroundColor,
+              borderColor: borderColor,
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          scales: {
+            xAxes: [{
+              gridLines: {
+                display: false
+              }
+            }],
+            yAxes: [{
+              gridLines: {
+                display: false
+              },
+              ticks: {
+                beginAtZero: true
+              }
+
+            }]
+          }
+        }
+      });
+      console.log(dataNo);
+    }
+
+  </script>
+
+</body>
+
+</html>
