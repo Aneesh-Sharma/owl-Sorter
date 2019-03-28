@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js">
+    </script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id='cssmenu'>
+        <ul>
+            <li><a href='./sort.html'>Bubble</a></li>
+            <li><a href='./insertion.html'>Insertion</a></li>
+            <li><a href='./selection.html'>selection</a></li>
+            <li><a href='./merge.html'>Merge</a></li>
+            <li><a href='./quick.html'>Quick</a></li>
+            <li class='active'><a href='#'>Heap</a></li>
+        </ul>
+        <img class="img1" src="./logo.jpg">
+    <img class="img2" src="./logo.jpg">
+    <img class="img3"src="./logo.jpg">
+    <img class="img4"src="./logo.jpg">
+    </div>
+    <div class="title">
+        <h2>Heap Sort</h2>
+    </div>
+    <canvas id="myChart" width="900" height="300"></canvas>
+
+    <div class="addSort">
+        <form>
+            Enter Value : <input type="text" name="arrValue" size="35"  placeholder="33,11,4,12,37"  />
+            <button class="btn" type="submit">Sort</button>
+        </form>
+    </div>
+
+
+    <pre>
+        <code>
+            <h1><center>Code</center></h1>
+            void heapify(int arr[], int n, int i) 
+            { 
+                int largest = i; // Initialize largest as root 
+                int l = 2*i + 1; // left = 2*i + 1 
+                int r = 2*i + 2; // right = 2*i + 2 
+              
+                // If left child is larger than root 
+                if (l < n && arr[l] > arr[largest]) 
+                    largest = l; 
+              
+                // If right child is larger than largest so far 
+                if (r < n && arr[r] > arr[largest]) 
+                    largest = r; 
+              
+                // If largest is not root 
+                if (largest != i) 
+                { 
+                    swap(arr[i], arr[largest]); 
+              
+                    // Recursively heapify the affected sub-tree 
+                    heapify(arr, n, largest); 
+                } 
+            }
+
+            void heapSort(int arr[], int n) 
+            { 
+                // Build heap (rearrange array) 
+                for (int i = n / 2 - 1; i >= 0; i--) 
+                    heapify(arr, n, i); 
+            
+                // One by one extract an element from heap 
+                for (int i=n-1; i>=0; i--) 
+                { 
+                    // Move current root to end 
+                    swap(arr[0], arr[i]); 
+            
+                    // call max heapify on the reduced heap 
+                    heapify(arr, i, 0); 
+                } 
+            } 
+        </code>
+      </pre>
+
+    <pro>
+        <h2>
+            <center>Analysis</center>
+        </h2>
+        <p> <strong>Average Case Time Complexity:</strong> O(nlog(n)).</p>
+          <p> <strong>Worst Case Time Complexity:</strong> O(nlog(n)).</p>
+        
+        <p><strong>Best Case Time Complexity: </strong>O(n). <br>
+            Best case occurs when all elements are same.</p>
+
+        <strong> Auxiliary Space:</strong> O(1)
+    </pro>
+
+    <script type="text/javascript">
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const myParam = urlParams.get('arrValue');
+        console.log("param", myParam);
+        var arr = [];
+        if (myParam) {
+            arr = myParam.split(",");
+        } else {
+            arr = ["44", "55", "61", "33", "69", "26", "34", "78", "98", "54", "13"]
+        }
+        var dataNo = [];
+        var labels = [];
+        arr.map((a, e) => {
+            dataNo.push(parseInt(a));
+            labels.push(e + 1);
+            return a;
+        });
+        var ctx = document.getElementById("myChart");
+        console.log(labels);
+        var myChart;
+        var backgroundColor = [];
+        var borderColor = [];
+        var BColor = ['rgba(255,255,0, 0.6)',
+            'rgba(124,252,0, 0.6)',
+            'rgba(255,0,0, 0.6)',
+            'rgba(0,191,255, 0.6)',
+            'rgba(255,0,255, 0.6)',
+            'rgba(255,140,0, 0.6)',
+            'rgba(0,0,128, 0.6)',
+            'rgba(240,230,140, 0.6)',
+            'rgba(128,128,0, 0.6)',
+            'rgba(255,99,71, 0.6)',
+            'rgba(86, 68, 0, 0.6)',
+            'rgba(68, 4, 84, 0.6)',
+            'rgba(72, 6, 43, 0.6)'
+        ];
+        var bColor = [
+            'rgba(255,255,0,1)',
+            'rgba(124,252,0, 1)',
+            'rgba(255,0,0, 1)',
+            'rgba(0,191,255, 1)',
+            'rgba(255,0,255, 1)',
+            'rgba(255,140,0, 1)',
+            'rgba(0,0,128, 1)',
+            'rgba(240,230,140, 1)',
+            'rgba(128,128,0, 1)',
+            'rgba(255,99,71, 1)',
+            'rgba(86, 68, 0, 1)',
+            'rgba(68, 4, 84, 1)',
+            'rgba(72, 6, 43, 1)'
+        ];
+
+        for (i = 0; i < dataNo.length; i++) {
+            let r;
+            r = Math.floor((Math.random() * 12) + 0);
+            backgroundColor.push(BColor[r]);
+            borderColor.push(bColor[r]);
+        }
+
+        display(dataNo);
+        var arrArray = [];
+        heapSort(dataNo,dataNo.length);
+
+        console.log('x', arrArray);
+        (function show(i) {
+            setTimeout(function () {
+                if (i < arrArray.length) {
+                 //   console.log(i, arrArray[i]);
+                    myChart.destroy();
+                    display(arrArray[i]);
+                    //  dataNo = arrArray[i]
+                    // update(dataNo);
+                    i++;
+                    show(i);
+                }
+            }, 200);
+        })(0);
+       // console.log(dataNo);
+       // update(dataNo);
+        //heap Sort 
+
+        function heapify(arr, n, i) {
+            var largest = i; // Initialize largest as root 
+            var l = 2 * i + 1; // left = 2*i + 1 
+            var r = 2 * i + 2; // right = 2*i + 2 
+
+            // If left child is larger than root 
+            if (l < n && arr[l] > arr[largest])
+                largest = l;
+
+            // If right child is larger than largest so far 
+            if (r < n && arr[r] > arr[largest])
+                largest = r;
+
+            // If largest is not root 
+            if (largest != i) {
+                //swap(arr[i], arr[largest]);
+                temp = arr[i];
+                arr[i] = arr[largest];
+                arr[largest] = temp;
+                // Recursively heapify the affected sub-tree 
+                heapify(arr, n, largest);
+                arrArray.push([...arr]);
+            }
+        }
+
+        function heapSort(arr, n) {
+            // Build heap (rearrange array) 
+            for (let i =  parseInt((n -1)/ 2); i >= 0; i--)
+               { heapify(arr, n, i);
+              //  console.log("cc",arr);
+              arrArray.push([...arr]);
+               }
+            // One by one extract an element from heap 
+            for (let i = n - 1; i >= 0; i--) {
+                // Move current root to end 
+               // swap(arr[0], arr[i]);
+                temp = arr[i];
+                arr[i] = arr[0];
+                arr[0] = temp;
+
+                // call max heapify on the reduced heap 
+                heapify(arr, i, 0);
+                arrArray.push([...arr]);
+            }
+        }
+
+
+        function update(data) {
+            myChart.data.datasets.forEach((dataset) => {
+                dataset.data.push(data);
+            });
+            myChart.update();
+        }
+
+        function display(data) {
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: null,
+                            data: data,
+                            backgroundColor: backgroundColor,
+                            borderColor: borderColor,
+                            borderWidth: 3
+                        }
+                    ]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled: false
+                    },
+                    scales: {
+                        xAxes: [{
+                            gridLines: {
+                                display: false
+                            },
+                            categoryPercentage: 1.0,
+                            barPercentage: 1.0
+                        }],
+                        yAxes: [{
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+
+                        }]
+                    },
+                    hover: { animationDuration: 0 },
+                    animation: {
+                        duration: 1,
+                        onComplete: function () {
+                            var chartInstance = this.chart,
+                                ctx = chartInstance.ctx;
+                            ctx.textAlign = 'center';
+                            ctx.fillStyle = "#0084ff";
+                            ctx.textBaseline = 'bottom';
+
+                            this.data.datasets.forEach(function (dataset, i) {
+                                var meta = chartInstance.controller.getDatasetMeta(i);
+                                meta.data.forEach(function (bar, index) {
+                                    var data = dataset.data[index];
+                                    ctx.fillText(data, bar._model.x, bar._model.y);
+
+                                });
+                            });
+                        }
+
+                    }
+                }
+
+            });
+        }
+
+    </script>
+
+</body>
+
+</html>

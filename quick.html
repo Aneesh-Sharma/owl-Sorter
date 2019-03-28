@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js">
+    </script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id='cssmenu'>
+        <ul>
+            <li><a href='./sort.html'>Bubble</a></li>
+            <li><a href='./insertion.html'>Insertion</a></li>
+            <li><a href='./selection.html'>selection</a></li>
+            <li><a href='./merge.html'>Merge</a></li>
+            <li class='active'><a href='#'>Quick</a></li>
+            <li><a href='./heap.html'>Heap</a></li>
+        </ul>
+        <img class="img1" src="./logo.jpg">
+    <img class="img2" src="./logo.jpg">
+    <img class="img3"src="./logo.jpg">
+    <img class="img4"src="./logo.jpg">
+    </div>
+    <div class="title">
+        <h2>Quick Sort</h2>
+    </div>
+    <canvas id="myChart" width="900" height="300"></canvas>
+
+    <div class="addSort">
+        <form>
+            Enter Value : <input type="text" name="arrValue" size="35"  placeholder="33,11,4,12,37" />
+            <button class="btn" type="submit">Sort</button>
+        </form>
+    </div>
+
+
+    <pre>
+        <code>
+            <h1><center>Code</center></h1>
+        void quickSort(var arr[], var low, var high) 
+        { 
+            if (low < high) 
+            { 
+                /* pi is partitioning index, arr[p] is now 
+                at right place */
+                var pi = partition(arr, low, high); 
+        
+                // Separately sort elements before 
+                // partition and after partition 
+                quickSort(arr, low, pi - 1); 
+                quickSort(arr, pi + 1, high); 
+            } 
+        } 
+
+        // A utility function to swap two elements 
+        void swap(int* a, int* b) 
+        { 
+            int t = *a; 
+            *a = *b; 
+            *b = t; 
+        } 
+        
+        /* This function takes last element as pivot, places 
+        the pivot element at its correct position in sorted 
+            array, and places all smaller (smaller than pivot) 
+        to left of pivot and all greater elements to right 
+        of pivot */
+        int partition (int arr[], int low, int high) 
+        { 
+            int pivot = arr[high];    // pivot 
+            int i = (low - 1);  // Index of smaller element 
+        
+            for (int j = low; j <= high- 1; j++) 
+            { 
+                // If current element is smaller than or 
+                // equal to pivot 
+                if (arr[j] <= pivot) 
+                { 
+                    i++;    // increment index of smaller element 
+                    swap(&arr[i], &arr[j]); 
+                } 
+            } 
+            swap(&arr[i + 1], &arr[high]); 
+            return (i + 1); 
+        } 
+        </code>
+      </pre>
+
+    <pro>
+        <h2>
+            <center>Analysis</center>
+        </h2>
+        <p> <strong>Average Case Time Complexity:</strong> O(nlog(n)).</p>
+        <p> <strong>Worst Case Time Complexity:</strong> O(n^2).</p>
+      
+      <p><strong>Best Case Time Complexity: </strong>O(n log(n)). <br></p>
+
+      <strong> Auxiliary Space:</strong> O(n)
+    </pro>
+
+    <script type="text/javascript">
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const myParam = urlParams.get('arrValue');
+        console.log("param", myParam);
+        var arr = [];
+        if (myParam) {
+            arr = myParam.split(",");
+        } else {
+            arr = ["44", "55", "61", "33", "69", "26", "34", "78", "98", "54", "13"]
+        }
+        var dataNo = [];
+        var labels = [];
+        arr.map((a, e) => {
+            dataNo.push(parseInt(a));
+            labels.push(e + 1);
+            return a;
+        });
+        var ctx = document.getElementById("myChart");
+        console.log(labels);
+        var myChart;
+        var backgroundColor = [];
+        var borderColor = [];
+        var BColor = ['rgba(255,255,0, 0.6)',
+            'rgba(124,252,0, 0.6)',
+            'rgba(255,0,0, 0.6)',
+            'rgba(0,191,255, 0.6)',
+            'rgba(255,0,255, 0.6)',
+            'rgba(255,140,0, 0.6)',
+            'rgba(0,0,128, 0.6)',
+            'rgba(240,230,140, 0.6)',
+            'rgba(128,128,0, 0.6)',
+            'rgba(255,99,71, 0.6)',
+            'rgba(86, 68, 0, 0.6)',
+            'rgba(68, 4, 84, 0.6)',
+            'rgba(72, 6, 43, 0.6)'
+        ];
+        var bColor = [
+            'rgba(255,255,0,1)',
+            'rgba(124,252,0, 1)',
+            'rgba(255,0,0, 1)',
+            'rgba(0,191,255, 1)',
+            'rgba(255,0,255, 1)',
+            'rgba(255,140,0, 1)',
+            'rgba(0,0,128, 1)',
+            'rgba(240,230,140, 1)',
+            'rgba(128,128,0, 1)',
+            'rgba(255,99,71, 1)',
+            'rgba(86, 68, 0, 1)',
+            'rgba(68, 4, 84, 1)',
+            'rgba(72, 6, 43, 1)'
+        ];
+
+        for (i = 0; i < dataNo.length; i++) {
+            let r;
+            r = Math.floor((Math.random() * 12) + 0);
+            backgroundColor.push(BColor[r]);
+            borderColor.push(bColor[r]);
+        }
+
+        display(dataNo);
+        var arrArray = [];
+        quickSort(dataNo, 0, dataNo.length - 1);
+
+        console.log('x', arrArray);
+        (function show(i) {
+            setTimeout(function () {
+                if (i < arrArray.length) {
+                    console.log(i, arrArray[i]);
+                    myChart.destroy();
+                    display(arrArray[i]);
+                    // dataNo = arrArray[i]
+                    //update(dataNo);
+                    i++;
+                    show(i);
+                }
+            }, 200);
+        })(0);
+
+        //quick Sort 
+
+        function quickSort(arr, low, high) {
+            if (low < high) {
+                var pi = partition(arr, low, high);
+
+                quickSort(arr, low, pi - 1);
+                quickSort(arr, pi + 1, high);
+            }
+        }
+
+        function partition(arr, low, high) {
+            var pivot = arr[high];    // pivot 
+            var i = (low - 1);  // Index of smaller element 
+
+            for (var j = low; j <= high - 1; j++) {
+                // If current element is smaller than or 
+                // equal to pivot 
+                if (arr[j] <= pivot) {
+                    i++;    // increment index of smaller element 
+                    var temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                    arrArray.push([...arr]);
+                }
+            }
+            //swap(& arr[i + 1], & arr[high]);
+            temp = arr[i+1];
+            arr[i+1] = arr[high];
+            arr[high] = temp;
+            arrArray.push([...arr]);
+            return (i + 1);
+        }
+     //   update(dataNo);
+
+
+        function update(data) {
+            myChart.data.datasets.forEach((dataset) => {
+                dataset.data.push(data);
+            });
+            myChart.update();
+        }
+
+        function display(data) {
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: null,
+                            data: data,
+                            backgroundColor: backgroundColor,
+                            borderColor: borderColor,
+                            borderWidth: 3
+                        }
+                    ]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled: false
+                    },
+                    scales: {
+                        xAxes: [{
+                            gridLines: {
+                                display: false
+                            },
+                            categoryPercentage: 1.0,
+                            barPercentage: 1.0
+                        }],
+                        yAxes: [{
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+
+                        }]
+                    },
+                    hover: { animationDuration: 0 },
+                    animation: {
+                        duration: 1,
+                        onComplete: function () {
+                            var chartInstance = this.chart,
+                                ctx = chartInstance.ctx;
+                            ctx.textAlign = 'center';
+                            ctx.fillStyle = "#0084ff";
+                            ctx.textBaseline = 'bottom';
+
+                            this.data.datasets.forEach(function (dataset, i) {
+                                var meta = chartInstance.controller.getDatasetMeta(i);
+                                meta.data.forEach(function (bar, index) {
+                                    var data = dataset.data[index];
+                                    ctx.fillText(data, bar._model.x, bar._model.y);
+
+                                });
+                            });
+                        }
+
+                    }
+                }
+
+            });
+        }
+
+    </script>
+
+</body>
+
+</html>

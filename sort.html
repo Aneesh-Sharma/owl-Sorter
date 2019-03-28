@@ -4,48 +4,162 @@
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js">
   </script>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+  <div id='cssmenu'>
+    <ul>
+      <li class='active'><a href='#'>Bubble</a></li>
+      <li><a href='./insertion.html'>Insertion</a></li>
+      <li><a href='./selection.html'>selection</a></li>
+      <li><a href='./merge.html'>Merge</a></li>
+      <li ><a href='./quick.html'>Quick</a></li>
+      <li><a href='./heap.html'>Heap</a></li>
+      <!-- <li> <img scr="./logo.jpg"></li> -->
+    </ul>
+    <img class="img1" src="./logo.jpg">
+    <img class="img2" src="./logo.jpg">
+    <img class="img3"src="./logo.jpg">
+    <img class="img4"src="./logo.jpg">
+  </div>
+  <div class="title">
+    <h2>Bubble Sort</h2>
+  </div>
 
-  <canvas id="myChart" width="900" height="400"></canvas>
+  <canvas id="myChart" width="900" height="300"></canvas>
+  <div class="addSort">
+    <form>
+      Enter Value : <input type="text" name="arrValue" size="35" placeholder="33,11,4,12,37" />
+      <button class="btn" type="submit">Sort</button>
+    </form>
+  </div>
+
+  <pre>
+      <code>
+          <h1><center>Code</center></h1>
+    // C program for implementation of Bubble sort 
+        
+         void swap(int *xp, int *yp) 
+        { 
+            int temp = *xp; 
+             *xp = *yp; 
+             *yp = temp; 
+         } 
+            
+        // A function to implement bubble sort 
+         void bubbleSort(int arr[], int n) 
+         { 
+            int i, j; 
+            for (i = 0; i < n-1; i++)       
+           
+                // Last i elements are already in place    
+                for (j = 0; j < n-i-1; j++)  
+                    if (arr[j] > arr[j+1]) 
+                       swap(&arr[j], &arr[j+1]); 
+         } 
+           
+         /* Function to print an array */
+         void printArray(int arr[], int size) 
+         { 
+             int i; 
+             for (i=0; i < size; i++) 
+                printf("%d ", arr[i]); 
+             printf("n"); 
+         } 
+          
+         // Driver program to test above functions 
+         int main() 
+         { 
+            int arr[] = {64, 34, 25, 12, 22, 11, 90}; 
+             int n = sizeof(arr)/sizeof(arr[0]); 
+             bubbleSort(arr, n); 
+             printf("Sorted array: \n"); 
+            printArray(arr, n); 
+            return 0; 
+        } 
+      </code>
+    </pre>
+
+  <pro>
+    <h2>
+      <center>Analysis</center>
+    </h2>
+    <p> <strong>Average Case Time Complexity:</strong> O(n^2).</p>
+    <p> <strong>Worst Case Time Complexity:</strong> O(n^2).</p>
+  
+  <p><strong>Best Case Time Complexity: </strong>O(n). <br></p>
+
+  <strong> Auxiliary Space:</strong> O(1)
+</pro>
+  </pro>
+
   <script type="text/javascript">
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const myParam = urlParams.get('arrValue');
+    console.log("param", myParam);
+    // var arr = prompt("Enter your numbers").split(",");
+    var arr = [];
+    if (myParam) {
+      arr = myParam.split(",");
+    } else {
+      arr = ["44", "55", "61", "33", "69", "26", "34", "78", "98", "54", "13"]
+    }
+    var dataNo = [];
+    var labels = [];
+    arr.map((a, e) => {
+      dataNo.push(parseInt(a));
+      labels.push(e + 1);
+      return a;
+    });
     var ctx = document.getElementById("myChart");
-    var dataNo = [103, 120, 48, 61, 82, 26, 105, 124, 78, 91, 62, 56];
-    var labels = [103, 120, 48, 61, 82, 26, 105, 124, 78, 91, 62, 56];
+
+    console.log(labels);
     var myChart;
-    var backgroundColor = ['rgba(255, 99, 132, 0.2)',
-      'rgba(54, 162, 235, 0.2)',
-      'rgba(255, 206, 86, 0.2)',
-      'rgba(75, 192, 192, 0.2)',
-      'rgba(153, 102, 255, 0.2)',
-      'rgba(255, 159, 64, 0.2)',
-      'rgba(255, 19, 132, 0.2)',
-      'rgba(54, 12, 235, 0.2)',
-      'rgba(25, 206, 86, 0.2)',
-      'rgba(75, 192, 12, 0.2)',
-      'rgba(153, 72, 255, 0.2)',
-      'rgba(255, 159, 164, 0.2)'
+    var backgroundColor = [];
+    var borderColor = [];
+    var BColor = ['rgba(255,255,0, 0.6)',
+      'rgba(124,252,0, 0.6)',
+      'rgba(255,0,0, 0.6)',
+      'rgba(0,191,255, 0.6)',
+      'rgba(255,0,255, 0.6)',
+      'rgba(255,140,0, 0.6)',
+      'rgba(0,0,128, 0.6)',
+      'rgba(240,230,140, 0.6)',
+      'rgba(128,128,0, 0.6)',
+      'rgba(255,99,71, 0.6)',
+      'rgba(86, 68, 0, 0.6)',
+      'rgba(68, 4, 84, 0.6)',
+      'rgba(72, 6, 43, 0.6)'
     ];
-    var borderColor = [
-      'rgba(255,99,132,1)',
-      'rgba(54, 162, 235, 1)',
-      'rgba(255, 206, 86, 1)',
-      'rgba(75, 192, 192, 1)',
-      'rgba(153, 102, 255, 1)',
-      'rgba(255, 159, 64, 1)',
-      'rgba(255,19,132,1)',
-      'rgba(54, 12, 235, 1)',
-      'rgba(25, 206, 86, 1)',
-      'rgba(75, 192, 12, 1)',
-      'rgba(153, 72, 255, 1)',
-      'rgba(255, 159, 164, 1)'
+    var bColor = [
+      'rgba(255,255,0,1)',
+      'rgba(124,252,0, 1)',
+      'rgba(255,0,0, 1)',
+      'rgba(0,191,255, 1)',
+      'rgba(255,0,255, 1)',
+      'rgba(255,140,0, 1)',
+      'rgba(0,0,128, 1)',
+      'rgba(240,230,140, 1)',
+      'rgba(128,128,0, 1)',
+      'rgba(255,99,71, 1)',
+      'rgba(86, 68, 0, 1)',
+      'rgba(68, 4, 84, 1)',
+      'rgba(72, 6, 43, 1)'
     ];
+
+    for (i = 0; i < dataNo.length; i++) {
+      let r;
+      r = Math.floor((Math.random() * 12) + 0);
+      backgroundColor.push(BColor[r]);
+      borderColor.push(bColor[r]);
+    }
 
     display(dataNo);
     bubble_Sort(dataNo);
 
+    //bubble sort 
     function bubble_Sort(a) {
       var swapp;
       var n = a.length - 1;
@@ -59,10 +173,6 @@
                 var temp = x[i];
                 x[i] = x[i + 1];
                 x[i + 1] = temp;
-
-                temp = labels[i];
-                labels[i] = labels[i + 1];
-                labels[i + 1] = temp;
 
                 temp = backgroundColor[i];
                 backgroundColor[i] = backgroundColor[i + 1];
@@ -83,7 +193,7 @@
                   theLoop(swapp);
                 }
               }
-            }, 200);
+            }, 80);
           })(0);
         }, 4);
       })(swapp);
@@ -91,34 +201,41 @@
     }
 
     function update(data) {
-      myChart.data.labels = labels;
       myChart.data.datasets.forEach((dataset) => {
         dataset.data.push(data);
       });
       myChart.update();
     }
 
-    function display(dataNo) {
+    function display(data) {
       myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: [103, 120, 48, 61, 82, 26, 105, 124, 78, 91, 62, 56],
+          labels: labels,
           datasets: [
             {
-              label: 'Value',
-              data: dataNo,
+              label: null,
+              data: data,
               backgroundColor: backgroundColor,
               borderColor: borderColor,
-              borderWidth: 1
+              borderWidth: 3
             }
           ]
         },
         options: {
+          legend: {
+            display: false
+          },
+          tooltips: {
+            enabled: false
+          },
           scales: {
             xAxes: [{
               gridLines: {
-                display: false
-              }
+                display: false,
+              }, 
+              categoryPercentage: 1.0,
+              barPercentage: 1.0
             }],
             yAxes: [{
               gridLines: {
@@ -129,10 +246,31 @@
               }
 
             }]
+          },
+          hover: { animationDuration: 0 },
+          animation: {
+            duration: 1,
+            onComplete: function () {
+              var chartInstance = this.chart,
+                ctx = chartInstance.ctx;
+              ctx.textAlign = 'center';
+              ctx.fillStyle = "#0084ff";
+              ctx.textBaseline = 'bottom';
+
+              this.data.datasets.forEach(function (dataset, i) {
+                var meta = chartInstance.controller.getDatasetMeta(i);
+                meta.data.forEach(function (bar, index) {
+                  var data = dataset.data[index];
+                  ctx.fillText(data, bar._model.x, bar._model.y);
+
+                });
+              });
+            }
+
           }
         }
+
       });
-      console.log(dataNo);
     }
 
   </script>
