@@ -10,10 +10,10 @@
 <body>
     <div id='cssmenu'>
         <ul>
-            <li><a href='./sort.html'>Bubble</a></li>
+            <li><a href='./index.html'>Bubble</a></li>
             <li><a href='./insertion.html'>Insertion</a></li>
-            <li class='active'><a href='#'>selection</a></li>
-            <li><a href='./merge.html'>Merge</a></li>
+            <li><a href='./selection.html'>selection</a></li>
+            <li class='active'><a href='#'>Merge</a></li>
             <li><a href='./quick.html'>Quick</a></li>
             <li><a href='./heap.html'>Heap</a></li>
         </ul>
@@ -23,13 +23,13 @@
     <img class="img4"src="./logo.jpg">
     </div>
     <div class="title">
-        <h2>Selection Sort</h2>
+        <h2>Merge Sort</h2>
     </div>
     <canvas id="myChart" width="900" height="300"></canvas>
 
     <div class="addSort">
         <form>
-            Enter Value : <input type="text" name="arrValue" size="35"  placeholder="33,11,4,12,37"  />
+            Enter Value : <input type="text" name="arrValue" size="35"  placeholder="33,11,4,12,37" />
             <button class="btn" type="submit">Sort</button>
         </form>
     </div>
@@ -38,52 +38,81 @@
     <pre>
         <code>
             <h1><center>Code</center></h1>
-            // C program for implementation of selection sort 
-              
-            void swap(int *xp, int *yp) 
+            /* C program for Merge Sort */
+
+        // Merges two subarrays of arr[]. 
+        // First subarray is arr[l..m] 
+        // Second subarray is arr[m+1..r] 
+        void merge(int arr[], int l, int m, int r) 
+        { 
+            int i, j, k; 
+            int n1 = m - l + 1; 
+            int n2 =  r - m; 
+        
+            /* create temp arrays */
+            int L[n1], R[n2]; 
+        
+            /* Copy data to temp arrays L[] and R[] */
+            for (i = 0; i < n1; i++) 
+                L[i] = arr[l + i]; 
+            for (j = 0; j < n2; j++) 
+                R[j] = arr[m + 1+ j]; 
+        
+            /* Merge the temp arrays back into arr[l..r]*/
+            i = 0; // Initial index of first subarray 
+            j = 0; // Initial index of second subarray 
+            k = l; // Initial index of merged subarray 
+            while (i < n1 && j < n2) 
             { 
-                int temp = *xp; 
-                *xp = *yp; 
-                *yp = temp; 
-            } 
-              
-            void selectionSort(int arr[], int n) 
-            { 
-                int i, j, min_idx; 
-              
-                // One by one move boundary of unsorted subarray 
-                for (i = 0; i < n-1; i++) 
+                if (L[i] <= R[j]) 
                 { 
-                    // Find the minimum element in unsorted array 
-                    min_idx = i; 
-                    for (j = i+1; j < n; j++) 
-                      if (arr[j] < arr[min_idx]) 
-                        min_idx = j; 
-              
-                    // Swap the found minimum element with the first element 
-                    swap(&arr[min_idx], &arr[i]); 
+                    arr[k] = L[i]; 
+                    i++; 
                 } 
+                else
+                { 
+                    arr[k] = R[j]; 
+                    j++; 
+                } 
+                k++; 
             } 
-              
-            /* Function to print an array */
-            void printArray(int arr[], int size) 
+        
+            /* Copy the remaining elements of L[], if there 
+            are any */
+            while (i < n1) 
             { 
-                int i; 
-                for (i=0; i < size; i++) 
-                    printf("%d ", arr[i]); 
-                printf("\n"); 
+                arr[k] = L[i]; 
+                i++; 
+                k++; 
             } 
-              
-            // Driver program to test above functions 
-            int main() 
+        
+            /* Copy the remaining elements of R[], if there 
+            are any */
+            while (j < n2) 
             { 
-                int arr[] = {64, 25, 12, 22, 11}; 
-                int n = sizeof(arr)/sizeof(arr[0]); 
-                selectionSort(arr, n); 
-                printf("Sorted array: \n"); 
-                printArray(arr, n); 
-                return 0; 
+                arr[k] = R[j]; 
+                j++; 
+                k++; 
             } 
+        } 
+        
+        /* l is for left index and r is right index of the 
+        sub-array of arr to be sorted */
+        void mergeSort(int arr[], int l, int r) 
+        { 
+            if (l < r) 
+            { 
+                // Same as (l+r)/2, but avoids overflow for 
+                // large l and h 
+                int m = l+(r-l)/2; 
+        
+                // Sort first and second halves 
+                mergeSort(arr, l, m); 
+                mergeSort(arr, m+1, r); 
+        
+                merge(arr, l, m, r); 
+            } 
+        } 
         </code>
       </pre>
 
@@ -91,12 +120,12 @@
         <h2>
             <center>Analysis</center>
         </h2>
-        <p> <strong>Average Case Time Complexity:</strong> O(n^2).</p>
-        <p> <strong>Worst Case Time Complexity:</strong> O(n^2).</p>
+        <p> <strong>Average Case Time Complexity:</strong> O(nlog(n)).</p>
+        <p> <strong>Worst Case Time Complexity:</strong> O(n log(n)).</p>
       
-      <p><strong>Best Case Time Complexity: </strong>O(n^2). <br></p>
+      <p><strong>Best Case Time Complexity: </strong>O(n log(n)). <br></p>
 
-      <strong> Auxiliary Space:</strong> O(1)
+      <strong> Auxiliary Space:</strong> O(n)
     </pro>
 
     <script type="text/javascript">
@@ -160,49 +189,93 @@
         }
 
         display(dataNo);
-        selection_Sort(dataNo);
+        var arrArray = [];
+        mergeSort(dataNo, 0, dataNo.length - 1);
 
-        //selection Sort 
-        function selection_Sort(arr) {
-            var minIdx, temp,
-                len = arr.length - 1;
-            (function theLoop(i) {
-                setTimeout(function () {
-                    minIdx = i;
-                    (function innerLoop(j) {
-                        setTimeout(function () {
-                            if (arr[j] < arr[minIdx]) {
-                                minIdx = j;
-                            }
-                            if (j < len) {
-                                j++;
-                                innerLoop(j);
-                            } else {
-                                temp = arr[i];
-                                arr[i] = arr[minIdx];
-                                arr[minIdx] = temp;
+        console.log('x', arrArray);
+        (function show(i) {
+            setTimeout(function () {
+                if (i < arrArray.length) {
+                    console.log(i, arrArray[i]);
+                    myChart.destroy();
+                    display(arrArray[i]);
+                    // dataNo = arrArray[i]
+                    //update(dataNo);
+                    i++;
+                    show(i);
+                }
+            }, 500);
+        })(0);
 
-                                temp = backgroundColor[i];
-                                backgroundColor[i] = backgroundColor[minIdx];
-                                backgroundColor[minIdx] = temp;
+        //merge Sort 
 
-                                temp = borderColor[i];
-                                borderColor[i] = borderColor[minIdx];
-                                borderColor[minIdx] = temp;
+        // Split the array varo halves and merge them recursively 
+        function mergeSort(arr, l, r) {
+            if (l < r) {
+                // Same as (l+r)/2, but avoids overflow for 
+                // large l and h 
+                var m = parseInt(l + (r - l) / 2);
 
-                                update(arr);
-                                if (i < len) {
-                                    i++;
-                                    theLoop(i);
-                                }
-                            }
-                        }, 130);
-                    })(i + 1);
-
-                }, 4);
-            })(0);
-            return arr;
+                // Sort first and second halves 
+                mergeSort(arr, l, m);
+                mergeSort(arr, m + 1, r);
+                merge(arr, l, m, r);
+            }
         }
+
+        // compare the arrays item by item and return the concatenated result
+        function merge(arr, l, m, r) {
+            var i, j, k;
+            var n1 = m - l + 1;
+            var n2 = r - m;
+
+            /* create temp arrays */
+            let L = [], R = [];
+
+            /* Copy data to temp arrays L[] and R[] */
+            for (i = 0; i < n1; i++)
+                L.push(arr[l + i]);
+            for (j = 0; j < n2; j++)
+                R.push(arr[m + 1 + j]);
+
+            /* Merge the temp arrays back varo arr[l..r]*/
+            i = 0; // Initial index of first subarray 
+            j = 0; // Initial index of second subarray 
+            k = l; // Initial index of merged subarray 
+            while (i < n1 && j < n2) {
+                if (L[i] <= R[j]) {
+                    arr[k] = L[i];
+                    i++;
+                }
+                else {
+                    arr[k] = R[j];
+                    j++;
+                }
+                k++;
+             //   arrArray.push([...arr]);
+            }
+
+
+            /* Copy the remaining elements of L[], if there 
+               are any */
+            while (i < n1) {
+                arr[k] = L[i];
+                i++;
+                k++;
+            }
+
+            /* Copy the remaining elements of R[], if there 
+               are any */
+            while (j < n2) {
+                arr[k] = R[j];
+                j++;
+                k++;
+            }
+
+            arrArray.push([...arr]);
+
+        }
+
 
         function update(data) {
             myChart.data.datasets.forEach((dataset) => {

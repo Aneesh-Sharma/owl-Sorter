@@ -10,12 +10,12 @@
 <body>
     <div id='cssmenu'>
         <ul>
-            <li><a href='./sort.html'>Bubble</a></li>
+            <li><a href='./index.html'>Bubble</a></li>
             <li><a href='./insertion.html'>Insertion</a></li>
-            <li class='active'><a href='#'>selection</a></li>
+            <li><a href='./selection.html'>selection</a></li>
             <li><a href='./merge.html'>Merge</a></li>
             <li><a href='./quick.html'>Quick</a></li>
-            <li><a href='./heap.html'>Heap</a></li>
+            <li class='active'><a href='#'>Heap</a></li>
         </ul>
         <img class="img1" src="./logo.jpg">
     <img class="img2" src="./logo.jpg">
@@ -23,7 +23,7 @@
     <img class="img4"src="./logo.jpg">
     </div>
     <div class="title">
-        <h2>Selection Sort</h2>
+        <h2>Heap Sort</h2>
     </div>
     <canvas id="myChart" width="900" height="300"></canvas>
 
@@ -38,51 +38,45 @@
     <pre>
         <code>
             <h1><center>Code</center></h1>
-            // C program for implementation of selection sort 
-              
-            void swap(int *xp, int *yp) 
+            void heapify(int arr[], int n, int i) 
             { 
-                int temp = *xp; 
-                *xp = *yp; 
-                *yp = temp; 
-            } 
+                int largest = i; // Initialize largest as root 
+                int l = 2*i + 1; // left = 2*i + 1 
+                int r = 2*i + 2; // right = 2*i + 2 
               
-            void selectionSort(int arr[], int n) 
-            { 
-                int i, j, min_idx; 
+                // If left child is larger than root 
+                if (l < n && arr[l] > arr[largest]) 
+                    largest = l; 
               
-                // One by one move boundary of unsorted subarray 
-                for (i = 0; i < n-1; i++) 
+                // If right child is larger than largest so far 
+                if (r < n && arr[r] > arr[largest]) 
+                    largest = r; 
+              
+                // If largest is not root 
+                if (largest != i) 
                 { 
-                    // Find the minimum element in unsorted array 
-                    min_idx = i; 
-                    for (j = i+1; j < n; j++) 
-                      if (arr[j] < arr[min_idx]) 
-                        min_idx = j; 
+                    swap(arr[i], arr[largest]); 
               
-                    // Swap the found minimum element with the first element 
-                    swap(&arr[min_idx], &arr[i]); 
+                    // Recursively heapify the affected sub-tree 
+                    heapify(arr, n, largest); 
                 } 
-            } 
-              
-            /* Function to print an array */
-            void printArray(int arr[], int size) 
+            }
+
+            void heapSort(int arr[], int n) 
             { 
-                int i; 
-                for (i=0; i < size; i++) 
-                    printf("%d ", arr[i]); 
-                printf("\n"); 
-            } 
-              
-            // Driver program to test above functions 
-            int main() 
-            { 
-                int arr[] = {64, 25, 12, 22, 11}; 
-                int n = sizeof(arr)/sizeof(arr[0]); 
-                selectionSort(arr, n); 
-                printf("Sorted array: \n"); 
-                printArray(arr, n); 
-                return 0; 
+                // Build heap (rearrange array) 
+                for (int i = n / 2 - 1; i >= 0; i--) 
+                    heapify(arr, n, i); 
+            
+                // One by one extract an element from heap 
+                for (int i=n-1; i>=0; i--) 
+                { 
+                    // Move current root to end 
+                    swap(arr[0], arr[i]); 
+            
+                    // call max heapify on the reduced heap 
+                    heapify(arr, i, 0); 
+                } 
             } 
         </code>
       </pre>
@@ -91,12 +85,13 @@
         <h2>
             <center>Analysis</center>
         </h2>
-        <p> <strong>Average Case Time Complexity:</strong> O(n^2).</p>
-        <p> <strong>Worst Case Time Complexity:</strong> O(n^2).</p>
-      
-      <p><strong>Best Case Time Complexity: </strong>O(n^2). <br></p>
+        <p> <strong>Average Case Time Complexity:</strong> O(nlog(n)).</p>
+          <p> <strong>Worst Case Time Complexity:</strong> O(nlog(n)).</p>
+        
+        <p><strong>Best Case Time Complexity: </strong>O(n). <br>
+            Best case occurs when all elements are same.</p>
 
-      <strong> Auxiliary Space:</strong> O(1)
+        <strong> Auxiliary Space:</strong> O(1)
     </pro>
 
     <script type="text/javascript">
@@ -160,49 +155,73 @@
         }
 
         display(dataNo);
-        selection_Sort(dataNo);
+        var arrArray = [];
+        heapSort(dataNo,dataNo.length);
 
-        //selection Sort 
-        function selection_Sort(arr) {
-            var minIdx, temp,
-                len = arr.length - 1;
-            (function theLoop(i) {
-                setTimeout(function () {
-                    minIdx = i;
-                    (function innerLoop(j) {
-                        setTimeout(function () {
-                            if (arr[j] < arr[minIdx]) {
-                                minIdx = j;
-                            }
-                            if (j < len) {
-                                j++;
-                                innerLoop(j);
-                            } else {
-                                temp = arr[i];
-                                arr[i] = arr[minIdx];
-                                arr[minIdx] = temp;
+        console.log('x', arrArray);
+        (function show(i) {
+            setTimeout(function () {
+                if (i < arrArray.length) {
+                 //   console.log(i, arrArray[i]);
+                    myChart.destroy();
+                    display(arrArray[i]);
+                    //  dataNo = arrArray[i]
+                    // update(dataNo);
+                    i++;
+                    show(i);
+                }
+            }, 200);
+        })(0);
+       // console.log(dataNo);
+       // update(dataNo);
+        //heap Sort 
 
-                                temp = backgroundColor[i];
-                                backgroundColor[i] = backgroundColor[minIdx];
-                                backgroundColor[minIdx] = temp;
+        function heapify(arr, n, i) {
+            var largest = i; // Initialize largest as root 
+            var l = 2 * i + 1; // left = 2*i + 1 
+            var r = 2 * i + 2; // right = 2*i + 2 
 
-                                temp = borderColor[i];
-                                borderColor[i] = borderColor[minIdx];
-                                borderColor[minIdx] = temp;
+            // If left child is larger than root 
+            if (l < n && arr[l] > arr[largest])
+                largest = l;
 
-                                update(arr);
-                                if (i < len) {
-                                    i++;
-                                    theLoop(i);
-                                }
-                            }
-                        }, 130);
-                    })(i + 1);
+            // If right child is larger than largest so far 
+            if (r < n && arr[r] > arr[largest])
+                largest = r;
 
-                }, 4);
-            })(0);
-            return arr;
+            // If largest is not root 
+            if (largest != i) {
+                //swap(arr[i], arr[largest]);
+                temp = arr[i];
+                arr[i] = arr[largest];
+                arr[largest] = temp;
+                // Recursively heapify the affected sub-tree 
+                heapify(arr, n, largest);
+                arrArray.push([...arr]);
+            }
         }
+
+        function heapSort(arr, n) {
+            // Build heap (rearrange array) 
+            for (let i =  parseInt((n -1)/ 2); i >= 0; i--)
+               { heapify(arr, n, i);
+              //  console.log("cc",arr);
+              arrArray.push([...arr]);
+               }
+            // One by one extract an element from heap 
+            for (let i = n - 1; i >= 0; i--) {
+                // Move current root to end 
+               // swap(arr[0], arr[i]);
+                temp = arr[i];
+                arr[i] = arr[0];
+                arr[0] = temp;
+
+                // call max heapify on the reduced heap 
+                heapify(arr, i, 0);
+                arrArray.push([...arr]);
+            }
+        }
+
 
         function update(data) {
             myChart.data.datasets.forEach((dataset) => {
